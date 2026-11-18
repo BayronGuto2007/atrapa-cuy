@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>¡Atrapa al Cuy!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Nunito:wght@600;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #bfe9ff;
+      --panel: #ffffff;
+      --ink: #23204a;
+      --hole: #5a3b26;
+      --grass: #6fcf5b;
+      --pink: #ff4fa3;
+      --sun: #ffd23f;
+      --muted: #5b5a85;
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top, 0px);
+      padding-bottom: env(safe-area-inset-bottom, 0px)
+    }
+
+    @media (prefers-color-scheme:dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #1b1840;
+        --panel: #2a2660;
+        --ink: #fff6d6;
+        --hole: #120b07;
+        --grass: #3f9a3a;
+        --pink: #ff6bb5;
+        --sun: #ffd23f;
+        --muted: #b9b6ee;
+        color-scheme: dark
+      }
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #1b1840;
+      --panel: #2a2660;
+      --ink: #fff6d6;
+      --hole: #120b07;
+      --grass: #3f9a3a;
+      --pink: #ff6bb5;
+      --sun: #ffd23f;
+      --muted: #b9b6ee;
+      color-scheme: dark
+    }
+
+    html {
+      scroll-padding-top: env(safe-area-inset-top, 0px)
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Nunito', system-ui, sans-serif;
+      font-weight: 600;
+      display: flex;
+      justify-content: center;
+      padding: 16px;
+      user-select: none;
+      -webkit-user-select: none
+    }
+
+    main {
+      width: 100%;
+      max-width: 440px;
+      text-align: center
+    }
+
+    h1 {
+      font-family: 'Bagel Fat One', 'Impact', sans-serif;
+      font-weight: 400;
+      font-size: clamp(2.2rem, 9vw, 3.2rem);
+      margin: 6px 0 4px;
+      color: var(--pink);
+      transform: rotate(-2deg);
+      letter-spacing: .5px
+    }
+
+    .sub {
+      margin: 0 0 14px;
+      color: var(--muted)
+    }
+
+    .bar {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 14px
+    }
+
+    .bar div {
+      flex: 1;
+      background: var(--panel);
+      border-radius: 18px;
+      padding: 8px 4px;
+      font-weight: 800
+    }
+
+    .bar b {
+      display: block;
+      font-family: 'Bagel Fat One', sans-serif;
+      font-weight: 400;
+      font-size: 1.7rem;
+      color: var(--pink)
+    }
+
+    .field {
+      background: var(--grass);
+      border-radius: 28px;
+      padding: 16px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      position: relative
+    }
+
+    .hole {
+      aspect-ratio: 1;
+      border: 0;
+      border-radius: 50%;
+      background: var(--hole);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      padding: 0;
+      box-shadow: inset 0 -8px 0 rgba(0, 0, 0, .35)
+    }
+
+    .hole:focus-visible {
+      outline: 4px solid var(--sun);
+      outline-offset: 3px
+    }
+
+    .critter {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -100%;
+      font-size: clamp(2.6rem, 13vw, 4rem);
+      line-height: 1;
+      transition: bottom .12s ease-out;
+      pointer-events: none
+    }
+
+    .hole.up .critter {
+      bottom: 12%
+    }
+
+    .hole.hit .critter {
+      transform: rotate(25deg) scale(.8)
+    }
+
+    .float {
+      position: absolute;
+      font-family: 'Bagel Fat One', sans-serif;
+      font-size: 1.6rem;
+      pointer-events: none;
+      animation: fl .7s ease-out forwards;
+      z-index: 2
+    }
+
+    @keyframes fl {
+      to {
+        transform: translateY(-46px);
+        opacity: 0
+      }
+    }
+
+    .msg {
+      min-height: 3.2em;
+      margin: 14px 0 8px;
+      font-weight: 800
+    }
+
+    button.go {
+      font: inherit;
+      font-family: 'Bagel Fat One', sans-serif;
+      font-size: 1.5rem;
+      background: var(--sun);
+      color: #23204a;
+      border: 0;
+      border-radius: 999px;
+      padding: 12px 34px;
+      cursor: pointer;
+      box-shadow: 0 6px 0 rgba(0, 0, 0, .25)
+    }
+
+    button.go:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 rgba(0, 0, 0, .25)
+    }
+
+    button.go:focus-visible {
+      outline: 4px solid var(--pink);
+      outline-offset: 3px
+    }
+
+    .legend {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: .9rem
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      .critter {
+        transition: none
+      }
+
+      .float {
+        animation-duration: .01s
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <h1>¡Atrapa al Cuy!</h1>
+    <p class="sub">Los cuyes se escapan. Tócalos antes de que se vayan.</p>
+    <div class="bar">
+      <div>Puntos<b id="score">0</b></div>
+      <div>Tiempo<b id="time">30</b></div>
+      <div>Récord<b id="best">0</b></div>
+    </div>
+    <div class="field" id="field"></div>
+    <p class="msg" id="msg">Toca “¡Jugar!” cuando estés listo.</p>
+    <button class="go" id="go">¡Jugar!</button>
+    <p class="legend">🐹 +1 &nbsp; 🦄 +5 &nbsp; 🧦 calcetín apestoso −3</p>
+  </main>
+  <script>
+    const field = document.getElementById('field'), $ = id => document.getElementById(id);
+    const holes = [];
+    for (let i = 0; i < 9; i++) {
+      const h = document.createElement('button');
+      h.className = 'hole'; h.setAttribute('aria-label', 'Hoyo ' + (i + 1));
+      h.innerHTML = '<span class="critter"></span>';
+      h.addEventListener('pointerdown', e => {e.preventDefault(); whack(i)});
+      field.appendChild(h); holes.push({el: h, c: h.firstChild, type: null, t: null});
+    }
+    const TYPES = [{e: '🐹', p: 1, w: 70}, {e: '🦄', p: 5, w: 10}, {e: '🧦', p: -3, w: 20}];
+    const funny = [
+      [0, 'Cero puntos. Los cuyes se rieron de ti.'],
+      [10, 'Poquito, pero el cuy te respeta.'],
+      [25, 'Nada mal. Ya hueles a cuy.'],
+      [45, '¡Eres el terror de los cuyes!'],
+      [999, 'Leyenda. Los cuyes pidieron tu autógrafo.']
+    ];
+    let score = 0, time = 30, running = false, best = 0, loop = null, clock = null, started = 0;
+    function pick() {let r = Math.random() * 100; for (const t of TYPES) {if ((r -= t.w) < 0) return t} return TYPES[0]}
+    function pop() {
+      if (!running) return;
+      const free = holes.map((h, i) => i).filter(i => !holes[i].type);
+      if (free.length) {
+        const i = free[Math.floor(Math.random() * free.length)], h = holes[i], t = pick();
+        h.type = t; h.c.textContent = t.e; h.el.classList.remove('hit'); h.el.classList.add('up');
+        const life = Math.max(420, 1000 - (Date.now() - started) / 30);
+        h.t = setTimeout(() => hide(i), life);
+      }
+      loop = setTimeout(pop, Math.max(260, 650 - (Date.now() - started) / 55));
+    }
+    function hide(i) {const h = holes[i]; clearTimeout(h.t); h.type = null; h.el.classList.remove('up')}
+    function whack(i) {
+      const h = holes[i]; if (!running || !h.type) return;
+      const t = h.type; h.el.classList.add('hit');
+      score = Math.max(0, score + t.p); $('score').textContent = score;
+      const f = document.createElement('span'); f.className = 'float';
+      f.textContent = (t.p > 0 ? '+' : '') + t.p; f.style.color = t.p > 0 ? '#fff' : '#ff3b3b';
+      const r = h.el.getBoundingClientRect(), fr = field.getBoundingClientRect();
+      f.style.left = (r.left - fr.left + r.width / 2 - 14) + 'px'; f.style.top = (r.top - fr.top + r.height / 3) + 'px';
+      field.appendChild(f); setTimeout(() => f.remove(), 700);
+      $('msg').textContent = t.p === 5 ? '¡Un cuy unicornio! Nadie te va a creer.' : t.p < 0 ? '¡Puaj! Ese calcetín llevaba semanas ahí.' : '¡Pillado!';
+      clearTimeout(h.t); h.t = setTimeout(() => hide(i), 120);
+    }
+    function start() {
+      score = 0; time = 30; running = true; started = Date.now();
+      $('score').textContent = 0; $('time').textContent = 30; $('go').disabled = true; $('msg').textContent = '¡Ya, ya, ya!';
+      clock = setInterval(() => {time--; $('time').textContent = time; if (time <= 0) end()}, 1000);
+      pop();
+    }
+    function end() {
+      running = false; clearInterval(clock); clearTimeout(loop); holes.forEach((_, i) => hide(i));
+      let m = funny.find(f => score <= f[0])[1];
+      if (score > best) {best = score; $('best').textContent = best; if (score > 0) m += ' ¡Nuevo récord!'}
+      $('msg').textContent = m; $('go').disabled = false; $('go').textContent = '¿Otra vez?';
+    }
+    $('go').addEventListener('click', start);
+  </script>
+</body>
+
+</html>
